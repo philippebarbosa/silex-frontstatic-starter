@@ -1,7 +1,5 @@
 /**
- * ************************************
- * PLUGINS
- * ************************************
+ * Plugins
  */
 var gulp         = require('gulp');
     sass         = require('gulp-sass'),
@@ -13,31 +11,21 @@ var gulp         = require('gulp');
     plumber      = require('gulp-plumber'),
     concat       = require('gulp-concat'),
     imageOptim   = require('gulp-imageoptim'),
-    uglify       = require('gulp-uglify');
-
-
-
+    uglify       = require('gulp-uglify'),
+    notify       = require("gulp-notify"),
+    browserSync  = require('browser-sync').create(),
+    reload       = browserSync.reload;
 
 
 /**
- * ************************************
  * PATHS
- * ************************************
  */
 var src  = 'app/assets/',
     dist = 'web/'
 
-
-
-
-
 /**
- * ************************************
  * CSS
- * ************************************
  */
-
-// Compile CSS
 gulp.task('css', function () {
     var processors = [
         autoprefixer({browsers: ['last 2 version']}),
@@ -46,71 +34,69 @@ gulp.task('css', function () {
         })
     ];
     return gulp.src(src + 'scss/index.scss')
-        .pipe(sass({ outputStyle : 'expanded' }).on('error', sass.logError))
+        .pipe(sass({ outputStyle : 'expanded' })
+        .on('error', notify.onError("Error: <%= error.message %>")))
         .pipe(postcss(processors))
         .pipe(gulp.dest(src + 'css/')) // save a copy to assets
-        .pipe(gulp.dest(dist + 'css/'));
+        .pipe(gulp.dest(dist + 'css/'))
+        .pipe(browserSync.stream());
 });
 
-// Minify CSS
 gulp.task('minify-css', function() {
   return gulp.src(src + 'css/index.css')
     .pipe(cleanCSS())
     .pipe(gulp.dest(dist + 'css/'));
 });
 
-
-
-
-
 /**
- * ************************************
  * JAVASCRIPT
- * ************************************
  */
 
-// Concatenate all librairies
-gulp.task('jsLibs', function() {
+// compile
+gulp.task('jsLibs', function() { // Concatenate all JS libs
     return gulp.src(src + 'js/plugins/*.js')
     .pipe(concat('plugins.js'))
     .pipe(gulp.dest(dist + 'js/'));
 });
 
-// Move main script file to dist
-gulp.task('jsScripts', function() {
+gulp.task('jsScripts', function() { // Move main js script file
   gulp.src(src + 'js/index.js')
     .pipe(plumber())
-    .pipe(rename('scripts.js'))
-    .pipe(gulp.dest(dist + 'js/'));
+    .pipe(rename('script.js'))
+    .pipe(gulp.dest(dist + 'js/'))
+    .pipe(browserSync.stream());
 });
 
-// Minify and move script file to dist
-gulp.task('jsScriptsBuild', function() {
+//build for prod
+gulp.task('jsScriptsBuild', function() { // Move and minify main js script file
   gulp.src( src + 'js/index.js')
     .pipe(plumber())
     .pipe(uglify())
-    .pipe(rename('scripts.js'))
+    .pipe(rename('script.js'))
     .pipe(gulp.dest(dist + 'js/'));
 });
 
-// Concatenate and minify librairies to dist
-gulp.task('jsLibsBuild', function() {
+gulp.task('jsLibsBuild', function() { // Concatenate and minify libs file
   return gulp.src(src + 'js/plugins/*.js')
     .pipe(concat('plugins.js'))
     .pipe(uglify())
     .pipe(gulp.dest(dist + 'js/'));
 });
 
-
 /**
- * ************************************
- * IMAGES
- * ************************************
+ * Images
  */
+
 gulp.task('images', function() {
     return gulp.src(src + 'img/**/*')
         .pipe(imageOptim.optimize())
         .pipe(gulp.dest(dist + 'img'));
+});
+
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        proxy: ""
+    });
 });
 
  /**
@@ -118,11 +104,11 @@ gulp.task('images', function() {
  */
 
 // default task (development)
-gulp.task('default', ['css', 'jsLibs', 'jsScripts'], function () {
+gulp.task('default', ['css', 'jsLibs', 'jsScripts', 'browser-sync'], function () {
     gulp.watch(src + 'scss/**/*.scss', ['css']);
     gulp.watch(src + 'js/**/*.js', ['jsScripts', 'jsLibs']);
     gulp.watch(src + 'img/**/*', ['images']);
-
+    gulp.watch('app/templates/*.html.twig').on("change", reload);
 });
 
 // Build tasks
