@@ -3,20 +3,20 @@
 composer.phar
 .DS_Store
 
-# Created by https://www.gitignore.io/api/sass,grunt,sublimetext,osx,windows :
+### NPM ###
+dist/
+node_modules/
+.tmp/
+*.log
 
+### SILEX STARTER WORKFLOW ###
+web/*
+!web/index.php
+
+# Created by https://www.gitignore.io/api/sass,grunt,sublimetext,osx,windows :
 ### Sass ###
 .sass-cache/
 *.css.map
-
-### grunt ###
-# Grunt usually compiles files inside this directory
-dist/
-node_modules/
-
-# Grunt usually preprocesses files such as coffeescript, compass... inside the .tmp directory
-.tmp/
-
 
 ### SublimeText ###
 # cache files for sublime text
