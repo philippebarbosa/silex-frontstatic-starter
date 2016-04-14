@@ -2,21 +2,19 @@
 /vendor/
 composer.phar
 .DS_Store
+*.log
+
+# Created by https://www.gitignore.io/api/sass,grunt,sublimetext,osx,windows :
+
+### Sass ###
+.sass-cache/
+*.css.map
 
 ### NPM ###
 dist/
 node_modules/
 .tmp/
-*.log
 
-### SILEX STARTER WORKFLOW ###
-web/*
-!web/index.php
-
-# Created by https://www.gitignore.io/api/sass,grunt,sublimetext,osx,windows :
-### Sass ###
-.sass-cache/
-*.css.map
 
 ### SublimeText ###
 # cache files for sublime text
