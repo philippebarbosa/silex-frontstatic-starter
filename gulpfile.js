@@ -34,7 +34,10 @@ gulp.task('css', function () {
         })
     ];
     return gulp.src(src + 'scss/index.scss')
-        .pipe(sass({ outputStyle : 'expanded' })
+        .pipe(sass({
+            outputStyle : 'expanded',
+            sourceComments: 'map'
+        })
         .on('error', notify.onError("Error: <%= error.message %>")))
         .pipe(postcss(processors))
         .pipe(gulp.dest(src + 'css/')) // save a copy to assets
