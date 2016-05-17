@@ -6,7 +6,7 @@ var gulp         = require('gulp');
     postcss      = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
     mqpacker     = require('css-mqpacker'),
-    cleanCSS     = require('gulp-clean-css'),
+    csso         = require('gulp-csso'),
     rename       = require("gulp-rename"),
     plumber      = require('gulp-plumber'),
     concat       = require('gulp-concat'),
@@ -44,7 +44,7 @@ gulp.task('css', function () {
 
 gulp.task('minify-css', function() {
   return gulp.src(src + 'css/index.css')
-    .pipe(cleanCSS())
+    .pipe(csso())
     .pipe(gulp.dest(dist + 'css/'));
 });
 
@@ -95,7 +95,7 @@ gulp.task('images', function() {
 
 gulp.task('browser-sync', function() {
     browserSync.init({
-        proxy: ""
+        proxy: "" // Your URL here
     });
 });
 
