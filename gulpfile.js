@@ -98,6 +98,7 @@ gulp.task('images', function() {
 
 gulp.task('browser-sync', function() {
     browserSync.init({
+        open:  false,
         proxy: "" // Your URL here
     });
 });
